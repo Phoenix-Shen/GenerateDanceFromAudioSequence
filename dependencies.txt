@@ -1,0 +1,3 @@
+pip install tensorboardx
+pip install ffmpeg
+pip install --upgrade torch
