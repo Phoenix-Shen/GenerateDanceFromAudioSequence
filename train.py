@@ -143,23 +143,30 @@ def compute_gradient_penalty_frame(D, real_samples, fake_samples):
     return gradient_penalty
 
 # 训练函数
-
+# 该函数并没有传DATALOADER的参数，使用的是全局变量
 
 def train(generator, frame_discriminator, seq_discriminator, opt):
-    batch_size = opt.batch_size
-    writer = SummaryWriter(log_dir=opt.out_tensorboard)
+    batch_size = opt.batch_size#参数设置 batch_SIZE
+    writer = SummaryWriter(log_dir=opt.out_tensorboard)#训练数据输出
+    #对抗损失 采用BCELOSS
     adversarial_loss = torch.nn.BCELoss()
     # 采用L1距离来进行像素级别的损失计算
     criterion_pixelwise = torch.nn.L1Loss()
+    # VGG LOSS 定义 丢入的一个参数是预训练的网络路径
     VGGLoss = GCNLoss(opt)
+    # 判别器损失 HCNLoss
     D_Feature = HCNLoss()
+
     index = 0
+
+    #开始训练
     for epoch in range(opt.niter):
         batches_done = 0
         total_loss1 = 0.0
         total_loss2 = 0.0
         total_loss3 = 0.0
         total_loss4 = 0.0
+        
         for i, (x, target) in enumerate(dataloader):
             audio = Variable(x.type(Tensor).transpose(1, 0))  # 50,1,1600
             pose = Variable(target.type(Tensor))  # 1,50,18,2
