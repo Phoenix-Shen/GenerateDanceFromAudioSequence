@@ -8,18 +8,27 @@ import numpy as np
 import bisect
 import json
 
+#%%
+#数据集的定义
 class DanceDataset(torch.utils.data.Dataset):
     def __init__(self, opt, train=True):
+        #获取文件名
         file_location=opt.data
+        #数据是三层嵌套字典形式
         pose_dict=read_from_json(file_location)
-        
+
+        #数据长度
         length=0
+        #按主键进行排序
         keys=sorted(pose_dict.keys())
         for key in keys:
             #index = str("%03d" % i)
+            #将时间片按主键排列  时间片是一个字符串形式 但是
             sub_keys=sorted(pose_dict[str(key)].keys())
+            #这个地方有点看不懂
             if key=="046":
                 break
+            #时间序列的循环
             for sub_key in sub_keys:
                 temp_pose=np.array(pose_dict[str(key)][str(sub_key)]["joint_coors"])
                 if(temp_pose.shape==(100,)):
@@ -118,13 +127,16 @@ class NumpyEncoder(json.JSONEncoder):
         elif isinstance(obj,(np.ndarray,)): #### This is the fix
             return obj.tolist()
         return json.JSONEncoder.default(self, obj) 
-    
+
+#写进JSON文件
 def save_to_json(dic,target_dir):
     dumped = json.dumps(dic, cls=NumpyEncoder)  
     file = open(target_dir, 'w')  
     json.dump(dumped, file)
     file.close()
-    
+
+
+#读取JSON文件
 def read_from_json(target_dir):
     f = open(target_dir,'r')
     data = json.load(f)
