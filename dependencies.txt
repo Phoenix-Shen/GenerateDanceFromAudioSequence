@@ -2,3 +2,4 @@ pip install tensorboardx
 pip install ffmpeg
 pip install --upgrade torch
 pip install --upgrade TensorBoard
+pip install librosa

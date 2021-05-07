@@ -21,7 +21,7 @@ def read_from_json(target_dir):
 # %%
 if __name__ == "__main__":
     pose_dict = read_from_json(
-        "c:/users/ssk/desktop/设计大赛/Music-Dance-Video-Synthesis-master/dataset/ballet_revised_pose_pairs.json")
+        "E:\\设计大赛\\Music-Dance-Video-Synthesis-master\\dataset\\ballet_revised_pose_pairs.json")
     length = 0
     keys = sorted(pose_dict.keys())
     for key in keys:
